@@ -226,6 +226,20 @@ export const Answer = ({ answer, onCitationClicked }: Props) => {
     )
   }
 
+  const renderCitationUrls = (citations: Citation[]) => {
+    return citations
+        .filter((citation, index, self) => self.findIndex(c => c.title === citation.title) === index)
+        .map((citation, index) => {
+            return (
+              <div key={index}>
+                <a href={citation.url ?? undefined} target="_blank" rel="noopener noreferrer">
+                  {citation.title}
+                </a>
+              </div>
+            );
+        });
+  };
+
   const components = {
     code({ node, ...props }: { node: any; [key: string]: any }) {
       let language
@@ -258,6 +272,7 @@ export const Answer = ({ answer, onCitationClicked }: Props) => {
                 className={styles.answerText}
                 components={components}
               />
+              <div>{renderCitationUrls(answer.citations)}</div>
             </Stack.Item>
             <Stack.Item className={styles.answerHeader}>
               {FEEDBACK_ENABLED && answer.message_id !== undefined && (
